@@ -22,4 +22,20 @@
    * **해결 방안:** 특정 회차(`concert_session_id`)의 예약 가능한 좌석(`status`)을 매우 빠르게 찾아오기 위해, `Seat` 테이블에 두 컬럼을 묶은 **복합 인덱스(Composite Index)**를 적용함. 이는 단순 CRUD를 넘어 대용량 데이터 조회를 고려한 설계임.
 
 ---
+
+## 2. 핵심 비즈니스 로직(API) 구현 및 동시성 제어 적용
+* **작업 일자:** 2026-05-07
+* **관련 커밋:** `feat: 콘서트 예매 비즈니스 로직 및 비관적 락(Pessimistic Lock) 적용`
+
+### 왜 이렇게 설계했는가? (Why & Architecture Point)
+
+1. **JPA `@Lock`을 활용한 예매 동시성 제어**
+   * **구현 방식:** `SeatRepository`에 `@Lock(LockModeType.PESSIMISTIC_WRITE)`를 선언하여 `findByIdForUpdate` 쿼리를 작성.
+   * **선택 이유 (Why):** 낙관적 락(Optimistic Lock)은 충돌이 잦을 경우 재시도 로직을 구현해야 하고 DB 부하가 커질 수 있음. 콘서트 티켓팅처럼 **"특정 좌석에 대한 충돌(경쟁)이 100% 확실시되는"** 상황에서는 최초에 락을 강하게 걸어버리는 비관적 락이 데이터 정합성을 가장 확실하고 빠르게 보장함.
+
+2. **글로벌 예외 처리기 (`@RestControllerAdvice`) 도입**
+   * **구현 방식:** 누군가 이미 선점한 좌석을 요청했을 때 발생하는 `SeatAlreadyReservedException`을 전역에서 낚아채서 일관된 에러 응답(`ErrorResponse`)으로 내려주도록 구현.
+   * **선택 이유 (Why):** 에러 처리 코드가 비즈니스 로직(Service)과 컨트롤러(Controller)에 파편화되는 것을 막고, 프론트엔드 개발자에게 규격화된 포맷(errorCode, errorMessage)을 제공하여 협업 효율성을 극대화하기 위함.
+
+---
 *(이후 새로운 기능이 추가될 때마다 여기에 누적해서 기록될 예정입니다.)*
