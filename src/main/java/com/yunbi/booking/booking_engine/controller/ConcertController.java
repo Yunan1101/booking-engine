@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "1. 콘서트 조회 API", description = "콘서트 목록, 회차, 좌석 등을 조회하는 기능")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -20,16 +24,19 @@ public class ConcertController {
 
     private final ConcertService concertService;
 
+    @Operation(summary = "전체 콘서트 목록 조회", description = "등록된 모든 콘서트 정보를 조회합니다.")
     @GetMapping("/concerts")
     public ResponseEntity<List<Concert>> getConcerts() {
         return ResponseEntity.ok(concertService.getAllConcerts());
     }
 
+    @Operation(summary = "콘서트 회차(세션) 조회", description = "특정 콘서트의 회차 일정 목록을 조회합니다.")
     @GetMapping("/concerts/{id}/sessions")
     public ResponseEntity<List<ConcertSession>> getSessions(@PathVariable("id") Long concertId) {
         return ResponseEntity.ok(concertService.getSessions(concertId));
     }
 
+    @Operation(summary = "예약 가능한 좌석 조회", description = "특정 콘서트 회차에서 현재 예매 가능한(AVAILABLE) 빈 좌석 목록을 조회합니다.")
     @GetMapping("/sessions/{id}/seats")
     public ResponseEntity<List<Seat>> getAvailableSeats(@PathVariable("id") Long sessionId) {
         return ResponseEntity.ok(concertService.getAvailableSeats(sessionId));
