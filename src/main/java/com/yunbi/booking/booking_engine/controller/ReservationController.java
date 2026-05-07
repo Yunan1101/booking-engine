@@ -20,9 +20,16 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Reservation> reserve(@RequestBody ReservationRequest request) {
+    public ResponseEntity<ReservationResponse> reserve(@RequestBody ReservationRequest request) {
         Reservation reservation = reservationService.reserveSeat(request.getUserId(), request.getSeatId());
-        return ResponseEntity.ok(reservation);
+        return ResponseEntity.ok(new ReservationResponse(reservation.getId(), reservation.getStatus().name()));
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ReservationResponse {
+        private Long reservationId;
+        private String status;
     }
 
     @Getter
