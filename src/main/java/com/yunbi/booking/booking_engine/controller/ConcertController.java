@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import java.util.stream.Collectors;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.yunbi.booking.booking_engine.dto.SeatResponse;
 
 @Tag(name = "1. 콘서트 조회 API", description = "콘서트 목록, 회차, 좌석 등을 조회하는 기능")
 @RestController
@@ -38,7 +41,11 @@ public class ConcertController {
 
     @Operation(summary = "예약 가능한 좌석 조회", description = "특정 콘서트 회차에서 현재 예매 가능한(AVAILABLE) 빈 좌석 목록을 조회합니다.")
     @GetMapping("/sessions/{id}/seats")
-    public ResponseEntity<List<Seat>> getAvailableSeats(@PathVariable("id") Long sessionId) {
-        return ResponseEntity.ok(concertService.getAvailableSeats(sessionId));
+    public ResponseEntity<List<SeatResponse>> getAvailableSeats(@PathVariable("id") Long sessionId) {
+        List<SeatResponse> seatResponses = concertService.getAvailableSeats(sessionId)
+                .stream()
+                .map(SeatResponse::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(seatResponses);
     }
 }

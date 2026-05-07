@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Engine - VIP Reservation</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div class="container">
+        <header>
+            <h1>IU 2026 WORLD TOUR</h1>
+            <p class="subtitle">Christmas Eve Special Session</p>
+            <div class="legend">
+                <div class="legend-item"><div class="seat-box available"></div> AVAILABLE</div>
+                <div class="legend-item"><div class="seat-box reserved"></div> RESERVED</div>
+                <div class="legend-item"><div class="seat-box selected"></div> SELECTED</div>
+            </div>
+        </header>
+
+        <div class="screen-indicator">STAGE</div>
+
+        <div class="seat-map" id="seatMap">
+            <!-- 좌석은 JS로 렌더링 됩니다 -->
+            <div class="loading">Loading seats...</div>
+        </div>
+
+        <div class="action-panel">
+            <div class="selected-info">
+                <span id="selectedSeatLabel">Select a seat</span>
+                <span id="selectedSeatPrice">₩ 0</span>
+            </div>
+            <button id="reserveBtn" class="reserve-btn" disabled>RESERVE TICKET</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Message</div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
