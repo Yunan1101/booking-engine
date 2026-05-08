@@ -226,11 +226,19 @@ h1 {
     font-weight: 600;
     transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .toast.show {
     bottom: 40px;
 }
-.toast.success { background: var(--seat-available); color: var(--bg-color); }
-.toast.error { background: var(--seat-reserved); color: #fff; }
+
+.toast.success {
+    background: var(--seat-available);
+    color: var(--bg-color);
+}
+
+.toast.error {
+    background: var(--seat-reserved);
+    color: #fff;
+}
